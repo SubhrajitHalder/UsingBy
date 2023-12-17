@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Use By Calculator || Subhrajit@codingzone.com</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="date">
+        <h2>Use By Calculator</h2>
+
+    <label for="manufacturingDate">Manufacturing Date:</label>
+    <input type="date" id="manufacturingDate" required>
+
+    <br>
+
+    <label for="numMonths">Number of Months:</label>
+    <input type="number" id="numMonths" min="1" required placeholder="Enter number of months" oninput="validateInput()"
+     oninput="validateInputt()"> 
+
+    <br><br>
+
+    <button onclick="calculateExpiryDate()">Calculate Use By</button>
+
+    <br><br>
+
+    <div id="expiryDateResult"></div>
+
+    </div>
+    <script>
+        function validateInputt() {
+            var inputField = document.getElementById('numMonths');
+            var inputValue = inputField.value;
+
+            // Use a regular expression to test if the input contains +, -, /, or *
+            if (/[\+\-\/*]/.test(inputValue)) {
+                // If the input contains any of the forbidden characters, remove them
+                inputField.value = inputValue.replace(/[\+\-\/*]/g, '');
+            }
+        }
+    </script>
+    <script>
+        function validateInput() {
+            var inputField = document.getElementById('numMonths');
+            var inputValue = inputField.value;
+
+            if (inputValue < 1) {
+                // If the input is negative, set the input value to 0
+                inputField.value = 1;
+            }
+        }
+    </script>
+    <script>
+        function calculateExpiryDate() {
+            var manufacturingDateInput = document.getElementById('manufacturingDate').value;
+            var numMonthsInput = parseInt(document.getElementById('numMonths').value, 10);
+
+            var manufacturingDate = new Date(manufacturingDateInput);
+            
+            if(manufacturingDate !== null && numMonthsInput !== null){
+                if (!isNaN(manufacturingDate.getTime())) {
+                var expiryDate = new Date(manufacturingDate);
+                expiryDate.setMonth(expiryDate.getMonth() + numMonthsInput);
+                expiryDate.setDate(expiryDate.getDate() - 1); // 1 day before
+
+                var formattedExpiryDate = formatDate(expiryDate);
+
+                document.getElementById('expiryDateResult').innerHTML = 'Use By: <br>' + formattedExpiryDate;
+            } else {
+                document.getElementById('expiryDateResult').innerHTML = 'Invalid Manufacturing Date';
+            }
+            }
+            else if(manufacturingDate == null){
+                document.getElementById('expiryDateResult').innerHTML = 'Invalid Manufacturing Date';
+            }
+            else{
+                document.getElementById('expiryDateResult').innerHTML = 'Invalid Months';
+            }
+        }
+
+        function formatDate(date) {
+            var day = ('0' + date.getDate()).slice(-2);
+            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+            var year = date.getFullYear().toString().slice(-2);
+
+            return day + '-' + month + '-' + year;
+        }
+    </script>
+</body>
+</html>
